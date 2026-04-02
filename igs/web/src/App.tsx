@@ -1,40 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import TextInput from 'react'
-import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/home';
+import Questions from './pages/questions';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>
-          Какой ты человек, исходя из квиза по страхованию??
-        </h1>
-        <p>
-          Страхование — это инструмент защиты от финансовых потерь, которые возможны в определенных случаях
-        </p>
-        <p>
-          Собери своего персонажа:
-        </p>
-        <p>Введи имя своего персонажа:</p>
-        <input name="myInput" />
-        <p>Выберите свой возраст:</p>
-        <div>
-        <button>младше 11</button>
-        <button>11-12</button>
-        <button>13-14</button>
-        <button>15-16</button>
-        <button>17-18</button>
-        <button>Старше 18</button>
-        </div>
-        <p>Выберите свой пол:</p>
-        <div>
-        <button>Ж</button>
-        <button>М</button>
-        </div>
-        <button>НАЧАТЬ ТЕСТ</button>
-      </header>
-    </div>
+    <BrowserRouter>
+      <nav style={{ padding: '20px', background: '#333', color: 'white' }}>
+        <Link to="/" style={{ marginRight: '15px', color: 'white' }}>Главная</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/questions" element={<Questions />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

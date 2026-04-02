@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+/* Глобальные стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Адаптивное меню */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Для телефонов */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+}
