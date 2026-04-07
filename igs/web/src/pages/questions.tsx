@@ -23,34 +23,29 @@ function Questions() {
     setAnswers(updatedAnswers);
     localStorage.setItem('quizAnswers', JSON.stringify(updatedAnswers));
     
-    // ЧЕТКИЕ ПУТИ БЕЗ УСЛОВИЙ
+    // ЛОГИКА ДЛЯ КАРТЫ = ДА (оставляем нетронутой)
     if (questionKey === 'hasCard' && value === 'Да') {
-      // Путь 1: Карта ДА -> вопрос о поездке
       setStep('travelPlan');
       localStorage.setItem('quizStep', 'travelPlan');
     }
+    // ЛОГИКА ДЛЯ КАРТЫ = НЕТ (теперь не заканчиваем, а идем на вопрос о месте)
     else if (questionKey === 'hasCard' && value === 'Нет') {
-      // Путь 2: Карта НЕТ -> вопрос о месте
       setStep('place');
       localStorage.setItem('quizStep', 'place');
     }
     else if (questionKey === 'travelPlan' && value === 'Да, в лагерь') {
-      // Путь 3: Поездка ДА -> РЕЗУЛЬТАТ
       setStep('result');
       localStorage.setItem('quizStep', 'result');
     }
     else if (questionKey === 'travelPlan' && value === 'Нет') {
-      // Путь 4: Поездка НЕТ -> вопрос о месте
       setStep('place');
       localStorage.setItem('quizStep', 'place');
     }
     else if (questionKey === 'place' && value === 'На улице с друзьями') {
-      // Путь 5: Место улица -> вопрос о поездке
-      setStep('travelPlan');
-      localStorage.setItem('quizStep', 'travelPlan');
+      setStep('result');
+      localStorage.setItem('quizStep', 'result');
     }
     else if (questionKey === 'place' && value === 'Дома') {
-      // Путь 6: Место дома -> вопрос о поездке
       setStep('travelPlan');
       localStorage.setItem('quizStep', 'travelPlan');
     }
@@ -86,6 +81,32 @@ function Questions() {
   const currentQuestion = getCurrentQuestion();
 
   if (step === 'result') {
+    let resultText = '';
+    let resultEmoji = '';
+    
+    if (answers.hasCard === 'Да' && answers.travelPlan === 'Да, в лагерь') {
+      resultText = 'Ты готов к приключениям! Везущий с картой и планами!';
+      resultEmoji = '🏕️🎉';
+    } else if (answers.hasCard === 'Да' && answers.travelPlan === 'Нет' && answers.place === 'На улице с друзьями') {
+      resultText = 'Ты активный тусовщик без планов на поездки!';
+      resultEmoji = '🎮👥';
+    } else if (answers.hasCard === 'Да' && answers.travelPlan === 'Нет' && answers.place === 'Дома') {
+      resultText = 'Ты домашний человек, любишь уют и комфорт!';
+      resultEmoji = '🏠😊';
+    } else if (answers.hasCard === 'Нет' && answers.place === 'На улице с друзьями') {
+      resultText = 'Ты общительный, но без карты. Наличные рулят!';
+      resultEmoji = '👥💰';
+    } else if (answers.hasCard === 'Нет' && answers.place === 'Дома' && answers.travelPlan === 'Нет') {
+      resultText = 'Ты домосед с наличными, любишь спокойствие!';
+      resultEmoji = '🏡😌';
+    } else if (answers.hasCard === 'Нет' && answers.place === 'Дома' && answers.travelPlan === 'Да, в лагерь') {
+      resultText = 'Ты планируешь поездку, но без карты - смелое решение!';
+      resultEmoji = '🏕️💪';
+    } else {
+      resultText = 'Спасибо за прохождение теста!';
+      resultEmoji = '🎯';
+    }
+
     return (
       <div style={{
         backgroundImage: `url(${backgroundImage})`,
@@ -100,11 +121,12 @@ function Questions() {
         justifyContent: 'center',
         textAlign: 'center'
       }}>
-        <h1>Твой результат!</h1>
+        <h1>{resultEmoji} Твой результат! {resultEmoji}</h1>
         <div style={{ background: 'white', padding: '20px', borderRadius: '15px', margin: '10px' }}>
           <p><strong>Банковская карта:</strong> {answers.hasCard || 'Не указано'}</p>
           <p><strong>Планы на поездку:</strong> {answers.travelPlan || 'Не указано'}</p>
           <p><strong>Где проводишь время:</strong> {answers.place || 'Не указано'}</p>
+          <h2 style={{ marginTop: '20px', color: '#ff6b6b' }}>{resultText}</h2>
         </div>
         
         <button onClick={() => setShowResults(!showResults)} style={{ margin: '10px' }}>
